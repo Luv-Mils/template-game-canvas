@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Website</title>
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#6366F1" />
+
+  <!-- Google Fonts — all typography options -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: 'rgb(var(--color-primary) / <alpha-value>)',
+            'primary-hover': 'rgb(var(--color-primary-hover) / <alpha-value>)',
+            secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
+            background: 'rgb(var(--color-background) / <alpha-value>)',
+            surface: 'rgb(var(--color-surface) / <alpha-value>)',
+            'surface-alt': 'rgb(var(--color-surface-alt) / <alpha-value>)',
+            foreground: 'rgb(var(--color-foreground) / <alpha-value>)',
+            muted: 'rgb(var(--color-muted) / <alpha-value>)',
+            border: 'rgb(var(--color-border) / <alpha-value>)',
+            accent: 'rgb(var(--color-accent) / <alpha-value>)',
+          },
+          fontFamily: {
+            heading: ['var(--font-heading)', 'system-ui', 'sans-serif'],
+            body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      --color-primary: 99 102 241;
+      --color-primary-hover: 79 70 229;
+      --color-secondary: 167 139 250;
+      --color-background: 15 13 26;
+      --color-surface: 26 23 48;
+      --color-surface-alt: 35 31 61;
+      --color-foreground: 226 232 240;
+      --color-muted: 148 163 184;
+      --color-border: 45 43 85;
+      --color-accent: 129 140 248;
+      --font-heading: 'Inter';
+      --font-body: 'Inter';
+    }
+    html { background-color: rgb(var(--color-background)); color: rgb(var(--color-foreground)); }
+    body { font-family: var(--font-body), system-ui, sans-serif; }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading), system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/index.tsx"></script>
+</body>
+</html>
