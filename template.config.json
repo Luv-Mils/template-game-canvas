@@ -1,0 +1,16 @@
+{
+  "id": "template-game-canvas",
+  "name": "Canvas Game Templates",
+  "version": "1.0.0",
+  "sdk": "1.0",
+  "description": "HTML5 Canvas games using game engine classes — physics, sprites, particles",
+  "category": "game",
+  "chassis": [
+    "platformer",
+    "tower-defense",
+    "roguelike",
+    "farming-sim",
+    "runner",
+    "space-shooter"
+  ]
+}

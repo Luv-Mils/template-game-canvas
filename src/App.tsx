@@ -1,37 +1,65 @@
-import React from 'react';
-import { ThemeProvider } from './shared/foundation';
-import { Navbar, Footer } from './shared/foundation';
+import React, { useState, useEffect, Suspense } from 'react';
+import type { VibeConfig, GameTheme, ChassisConfig } from './types';
+import { getTheme, hexToRgb } from './themes';
+import { loadChassis, loadGame } from './chassis';
 
-// TODO: Replace with your template's theme and typography config
-const theme = {
-  colors: {
-    primary: '#6366F1',
-    primaryHover: '#4F46E5',
-    secondary: '#A78BFA',
-    background: '#0F0D1A',
-    surface: '#1A1830',
-    surfaceAlt: '#252340',
-    foreground: '#E2E8F0',
-    muted: '#94A3B8',
-    border: '#2D2B4E',
-    accent: '#F59E0B',
-  },
-  isDark: true,
-};
+// @ts-expect-error vite json import
+import defaultConfig from '../vibe.config.json';
 
-const typography = { heading: 'Inter', body: 'Inter' };
+function resolveConfig(): VibeConfig {
+  const cfg = { ...(defaultConfig as VibeConfig) };
+  const params = new URLSearchParams(window.location.search);
+  const chassis = params.get('chassis');
+  if (chassis) cfg.chassis = chassis;
+  const theme = params.get('theme');
+  if (theme) cfg.theme = theme;
+  return cfg;
+}
+
+function applyThemeToCSS(theme: GameTheme) {
+  const root = document.documentElement;
+  const c = theme.colors;
+  root.style.setProperty('--color-primary', hexToRgb(c.primary));
+  root.style.setProperty('--color-accent', hexToRgb(c.accent));
+  root.style.setProperty('--color-background', hexToRgb(c.background));
+  root.style.setProperty('--color-surface', hexToRgb(c.surface));
+  root.style.setProperty('--color-surface-alt', hexToRgb(c.surfaceAlt));
+  root.style.setProperty('--color-foreground', hexToRgb(c.foreground));
+  root.style.setProperty('--color-muted', hexToRgb(c.muted));
+  root.style.setProperty('--color-border', hexToRgb(c.border));
+}
 
 export default function App() {
-  return (
-    <ThemeProvider theme={theme} typography={typography}>
-      <div className="min-h-screen bg-background text-foreground">
-        <Navbar config={{ brand: { name: 'platformer' }, links: [] }} />
-        <main className="p-8">
-          <h1 className="text-3xl font-heading font-bold">Welcome to platformer</h1>
-          <p className="mt-4 text-muted">This template is ready for customization.</p>
-        </main>
-        <Footer config={{ brand: { name: 'platformer' }, linkGroups: [] }} />
+  const [config] = useState(resolveConfig);
+  const [chassisConfig, setChassisConfig] = useState<ChassisConfig | null>(null);
+  const [GameComponent, setGameComponent] = useState<React.ComponentType<{ theme: GameTheme }> | null>(null);
+  const [theme, setTheme] = useState<GameTheme | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const cc = await loadChassis(config.chassis);
+      setChassisConfig(cc);
+      const t = cc.themes[config.theme] ?? cc.themes[cc.defaultTheme] ?? getTheme(config.theme);
+      setTheme(t);
+      applyThemeToCSS(t);
+      document.title = cc.name;
+
+      const Game = await loadGame(config.chassis);
+      setGameComponent(() => Game);
+    })();
+  }, [config]);
+
+  if (!theme || !GameComponent || !chassisConfig) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-muted animate-pulse">Loading game...</div>
       </div>
-    </ThemeProvider>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <GameComponent theme={theme} />
+    </div>
   );
 }

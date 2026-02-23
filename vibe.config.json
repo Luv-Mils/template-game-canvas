@@ -1,9 +1,4 @@
 {
-  "template": "platformer",
-  "sdk_version": "1.0",
-  "defaults": {
-    "layout": "default",
-    "theme": "default",
-    "typography": "default"
-  }
+  "chassis": "platformer",
+  "theme": "retro"
 }
