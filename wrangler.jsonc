@@ -1,0 +1,11 @@
+{
+  // Cloudflare Worker config for provisioned apps.
+  // The "name" field is replaced by the Hub provisioner with the app slug.
+  // Do not change APP_NAME_PLACEHOLDER — the provisioner depends on this exact string.
+  "name": "APP_NAME_PLACEHOLDER",
+  "compatibility_date": "2024-09-23",
+  "assets": {
+    "directory": "dist",
+    "not_found_handling": "single-page-application"
+  }
+}
